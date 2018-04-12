@@ -22,7 +22,7 @@ class SessionController extends Controller
             'password' => 'required'
         ]);
 
-        if(Auth::attempt($credentials)){
+        if(Auth::attempt($credentials,$request->has('rember'))){
             //登录成功后的相关操作
             session()->flash('success', '欢迎回来！');
             return redirect()->route('users.show', [Auth::user()]);
@@ -31,5 +31,12 @@ class SessionController extends Controller
             session()->flash('danger', '很抱歉，您的邮箱和密码不匹配');
             return redirect()->back();
         }
+    }
+
+    public function destroy()
+    {
+        Auth::logout();
+        session()->flash('success', '您已成功退出！');
+        return redirect('login');
     }
 }
